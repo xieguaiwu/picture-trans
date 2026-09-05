@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- 简单相片+箭头矢量图形 -->
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="108dp"
+    android:height="108dp"
+    android:viewportWidth="108"
+    android:viewportHeight="108">
+    <path
+        android:fillColor="#FFFFFF"
+        android:pathData="M30,38 L70,38 A6,6 0 0 1 76,44 L76,68 A6,6 0 0 1 70,74 L30,74 A6,6 0 0 1 24,68 L24,44 A6,6 0 0 1 30,38 Z M28,66 L42,52 L54,64 L62,56 L76,68 L76,70 L28,70 Z" />
+    <path
+        android:fillColor="#FFFFFF"
+        android:pathData="M66,20 L84,20 A2,2 0 0 1 86,22 L86,30 L82,30 L82,25.7 L70,37.7 L67.2,34.9 L79.1,23 L66,23 Z" />
+</vector>
