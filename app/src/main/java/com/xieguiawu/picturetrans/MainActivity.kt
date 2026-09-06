@@ -21,4 +21,10 @@ class MainActivity : ComponentActivity() {
             }
         }
     }
+
+    /** 用户可能从系统设置页改完权限返回，回到前台时重新检查（官方 best practice）。 */
+    override fun onResume() {
+        super.onResume()
+        vm.refreshPermission()
+    }
 }

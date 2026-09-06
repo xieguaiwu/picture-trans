@@ -1,6 +1,9 @@
 package com.xieguiawu.picturetrans.ui
 
+import android.content.Intent
+import android.net.Uri
 import android.provider.Settings
+import com.xieguiawu.picturetrans.media.MediaAccess
 import com.xieguiawu.picturetrans.media.MediaPermissions
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
@@ -59,7 +62,7 @@ import com.xieguiawu.picturetrans.transfer.Direction
 @Composable
 fun MainScreen(vm: MainViewModel) {
     val serverState by vm.serverState.collectAsState()
-    val mediaGranted by vm.mediaGranted.collectAsState()
+    val mediaAccess by vm.mediaAccess.collectAsState()
     val active by vm.activeTransfers.collectAsState()
     val history by vm.history.collectAsState()
     var portText by remember { mutableStateOf(vm.defaultPort().toString()) }
@@ -78,8 +81,11 @@ fun MainScreen(vm: MainViewModel) {
             fontWeight = FontWeight.Bold,
         )
 
-        if (!mediaGranted) {
-            PermissionCard(onGranted = { vm.refreshPermission() })
+        if (mediaAccess != MediaAccess.Full) {
+            PermissionCard(
+                access = mediaAccess,
+                onResult = { vm.refreshPermission() },
+            )
         }
 
         when (val s = serverState) {
@@ -188,10 +194,40 @@ private fun progressOf(p: com.xieguiawu.picturetrans.transfer.TransferProgress):
     if (p.bytesTotal > 0) (p.bytesDone.toFloat() / p.bytesTotal).coerceIn(0f, 1f) else 0f
 
 @Composable
-private fun PermissionCard(onGranted: () -> Unit) {
+private fun PermissionCard(access: MediaAccess, onResult: () -> Unit) {
+    val context = androidx.compose.ui.platform.LocalContext.current
     val launcher = rememberLauncherForActivityResult(
         ActivityResultContracts.RequestMultiplePermissions(),
-    ) { onGranted() }
+    ) { onResult() }
+
+    // 部分授权（Android 14+「选择照片」）：可用但受限，提示用户可重新加选或给全量。
+    // 注意：部分授权后再次 launch 请求，系统弹的是照片选择器（重新加选），不再是权限弹窗。
+    if (access == MediaAccess.Partial) {
+        Card(Modifier.fillMaxWidth()) {
+            Column(Modifier.padding(16.dp), verticalArrangement = Arrangement.spacedBy(8.dp)) {
+                Text("已授权访问部分照片", fontWeight = FontWeight.SemiBold)
+                Text(
+                    "只能传输选中的照片和视频；可在电脑端确认列表是否完整。",
+                    style = MaterialTheme.typography.bodySmall,
+                )
+                Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+                    Button(onClick = { launcher.launch(MediaPermissions.required()) }) {
+                        Text("更多照片")
+                    }
+                    TextButton(onClick = {
+                        context.startActivity(
+                            Intent(
+                                Settings.ACTION_APPLICATION_DETAILS_SETTINGS,
+                                Uri.fromParts("package", context.packageName, null),
+                            ),
+                        )
+                    }) { Text("允许全部") }
+                }
+            }
+        }
+        return
+    }
+
     Card(Modifier.fillMaxWidth()) {
         Column(Modifier.padding(16.dp), verticalArrangement = Arrangement.spacedBy(8.dp)) {
             Text("需要授权访问照片和视频", fontWeight = FontWeight.SemiBold)
@@ -204,7 +240,13 @@ private fun PermissionCard(onGranted: () -> Unit) {
                     Text("授权")
                 }
                 TextButton(onClick = {
-                    // Android 11+ 半开设置页，便于手动处理「仅此一次」等限制授权
+                    // 跳应用详情设置页：系统在永久拒绝后不再弹权限窗，只能在这里改
+                    context.startActivity(
+                        Intent(
+                            Settings.ACTION_APPLICATION_DETAILS_SETTINGS,
+                            Uri.fromParts("package", context.packageName, null),
+                        ),
+                    )
                 }) { Text("忽略") }
             }
         }
