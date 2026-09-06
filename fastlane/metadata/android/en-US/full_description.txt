@@ -1,0 +1,30 @@
+Picture Trans turns your phone into a local file server so you can move
+files between your Android device and your computer over the same Wi-Fi —
+no USB cable, no cloud, no app to install on the computer.
+
+How it works:
+- The app runs a built-in HTTP server and shows a URL plus a QR code
+- Open that URL in any modern browser on your computer
+- Phone to PC: browse and download photos, videos and Download-folder
+  files, individually or multi-selected
+- PC to Phone: drag and drop to upload — images and videos land in your
+  gallery, everything else in Downloads
+- Video preview with seeking (HTTP Range), thumbnail grid, live transfer
+  progress and history on the phone
+
+Privacy and security:
+- No ads, no trackers, no telemetry, no accounts. Nothing is uploaded
+  anywhere except your own local network.
+- A random 16-character token is generated per install and embedded in
+  the URL path (/t/<token>/); requests without it get a 404.
+- The server binds to the LAN interface only. Traffic is plain HTTP,
+  a deliberate trade-off to avoid certificate management on a home
+  network — do not port-forward or expose the server to the internet.
+- Media access uses Android's scoped storage (MediaStore); the app never
+  asks for broad filesystem permissions on Android 10 and later.
+- Backup is disabled so the access token cannot leak through adb backup.
+
+Requirements: Android 8.0 (API 26) or later. Phone and computer must be on
+the same Wi-Fi network or hotspot.
+
+License: MIT. Source code is available on GitHub.

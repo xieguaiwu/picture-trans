@@ -2,7 +2,18 @@
 
 Transfer files between your Android phone and computer over the same local network (LAN) — no USB cable, no cloud, no PC-side installation.
 
-![architecture](docs/architecture.png)
+```
+phone (Picture Trans)                         computer
++---------------------------+                +----------------------+
+| Compose UI                |                | any browser          |
+|  - QR code + URL          |                |  - no install needed |
+|  - transfer progress      |                |  - download/upload   |
++---------------------------+                +----------+-----------+
+| Ktor CIO HTTP server      |<---- LAN / HTTP --------->|
+|  /t/<token>/  (404 else)  |                drag & drop, Range GETs
+|  MediaStore repository    |
++---------------------------+
+```
 
 ## What it does
 
@@ -90,3 +101,22 @@ app/src/main/java/com/xieguiawu/picturetrans/
 - Server runs while the app is open (screen-off stops it — foreground service is future work)
 - Old devices (API 26–28) need the legacy per-file permission path
 - No folder browsing beyond the Download directory (MediaStore-based listing)
+## F-Droid
+
+**Not submitted.** `docs/fdroid/` holds a validated fdroiddata metadata draft,
+a ready-to-`git am` MR patch and a submission guide with a pre-flight checklist.
+Opening the merge request needs a GitLab account.
+
+- No `AntiFeatures` are declared — unlike the author's other apps, this one
+  depends on no proprietary network service. Don't copy another app's yml.
+- Store metadata: `fastlane/metadata/android/{en-US,zh-CN}/`
+- Screenshots are rendered from the real UI code under Robolectric + layoutlib
+  (no device needed, no fabricated pixels):
+
+  ```bash
+  ./gradlew :app:testDebugUnitTest --tests "*StoreScreenshotsTest" -PstoreScreenshots
+  ```
+
+- Store icon is rendered from the live adaptive-icon vector:
+  `python3 scripts/render-icon.py`
+- Pre-flight check: `bash scripts/validate-fdroid-metadata.sh`

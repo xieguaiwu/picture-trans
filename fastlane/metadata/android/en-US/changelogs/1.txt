@@ -1,0 +1,8 @@
+First release.
+
+- Built-in HTTP server with QR code and per-install access token
+- Browse and download photos, videos and Download-folder files
+  from a computer browser, with multi-select
+- Drag-and-drop upload from PC to phone (gallery or Downloads)
+- Video seeking via HTTP Range, thumbnail grid, live progress
+  and transfer history
