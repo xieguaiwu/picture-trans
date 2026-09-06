@@ -29,7 +29,10 @@ build_once() {
   # Guard: the APK must actually carry the app, not be an empty shell.
   # No pipe here: pipefail + grep -q + unzip SIGPIPE would false-negative.
   unzip -l "$apk" > "/tmp/pt-rb-apk-$tag.txt" 2>&1 || true
-  for want in classes.dex "res/mipmap" AndroidManifest.xml; do
+  # NB: release builds shorten resource paths (res/mipmap-anydpi-v26/... becomes
+  # res/xx.png), so never grep for a res/<dir> prefix here. resources.arsc is the
+  # stable place to assert the app's resources actually shipped.
+  for want in classes.dex AndroidManifest.xml resources.arsc; do
     if ! grep -q "$want" "/tmp/pt-rb-apk-$tag.txt"; then
       echo "FAIL: APK missing '$want'"; exit 1
     fi
