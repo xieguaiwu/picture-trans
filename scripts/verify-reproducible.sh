@@ -1,30 +1,49 @@
 #!/usr/bin/env bash
-# Reproducible build verification for F-Droid.
-# Runs two clean release builds from a committed tree and compares
-# APK SHA-256 hashes. Must be run from a clean git repo (tag).
+# Reproducible-build check (F-Droid Verified route): two clean builds from the
+# same commit must produce byte-identical APK SHA-256s.
+#
+# Why unsigned: AGP 8.x signs with RSA-PSS, whose random salt makes the APK
+# Signing Block differ on every build even when every zip entry is identical
+# (measured: 164/164 entries CRC-equal, whole-file SHA still differed). So the
+# comparison is done on app-release-unsigned.apk, which is also how F-Droid's
+# own check works (signature-stripped comparison via apksigcopier).
+#
+# Usage: scripts/verify-reproducible.sh   (run anywhere; cd's to repo root)
 set -euo pipefail
 
-if [ -n "$(git status --porcelain)" ]; then
-  echo "FAIL: working tree is not clean"
-  exit 1
-fi
+cd "$(dirname "${BASH_SOURCE[0]}")/.."
 
-# F-Droid buildserver sets SOURCE_DATE_EPOCH; align it here.
-if [ -z "${SOURCE_DATE_EPOCH:-}" ]; then
-  export SOURCE_DATE_EPOCH="$(git log -1 --format=%ct)"
-  echo "SOURCE_DATE_EPOCH=$SOURCE_DATE_EPOCH"
-fi
+git diff --quiet --exit-code || { echo "FAIL: working tree is dirty"; exit 1; }
 
-for i in 1 2; do
-  echo "=== Build $i ==="
-  ./gradlew clean assembleRelease --no-daemon > /tmp/rb-build-$i.log 2>&1
-  find app/build/outputs/apk -name '*.apk' | sort | xargs sha256sum > /tmp/rb-hash-$i.txt
-  cat /tmp/rb-hash-$i.txt
-done
+export SOURCE_DATE_EPOCH="$(git log -1 --format=%ct)"
+echo "SOURCE_DATE_EPOCH=$SOURCE_DATE_EPOCH"
 
-if diff -u /tmp/rb-hash-1.txt /tmp/rb-hash-2.txt; then
-  echo "OK: reproducible (hashes match)"
+build_once() {
+  local tag="$1"
+  ./gradlew clean assembleRelease -PunsignedRelease --no-daemon \
+      > "/tmp/pt-rb-build-$tag.log" 2>&1 || {
+    echo "FAIL: build $tag failed"; tail -30 "/tmp/pt-rb-build-$tag.log"; exit 1
+  }
+  local apk=app/build/outputs/apk/release/app-release-unsigned.apk
+  [ -f "$apk" ] || { echo "FAIL: $apk not produced (is -PunsignedRelease wired?)"; exit 1; }
+  # Guard: the APK must actually carry the app, not be an empty shell.
+  # No pipe here: pipefail + grep -q + unzip SIGPIPE would false-negative.
+  unzip -l "$apk" > "/tmp/pt-rb-apk-$tag.txt" 2>&1 || true
+  for want in classes.dex "res/mipmap" AndroidManifest.xml; do
+    if ! grep -q "$want" "/tmp/pt-rb-apk-$tag.txt"; then
+      echo "FAIL: APK missing '$want'"; exit 1
+    fi
+  done
+  sha256sum "$apk" > "/tmp/pt-rb-hash-$tag.txt"
+}
+
+build_once one
+build_once two
+
+if diff -u "/tmp/pt-rb-hash-one.txt" "/tmp/pt-rb-hash-two.txt"; then
+  echo "OK: reproducible — both builds produce identical unsigned APKs:"
+  cat "/tmp/pt-rb-hash-one.txt"
 else
-  echo "FAIL: hashes differ"
+  echo "FAIL: APK hashes differ (non-reproducible build)"
   exit 1
 fi

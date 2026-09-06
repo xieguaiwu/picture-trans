@@ -36,11 +36,16 @@ android {
     buildTypes {
         release {
             isMinifyEnabled = false
-            // 无 keystore.properties 时回退 debug 签名（本机侧载友好）；上架前配置正式签名
-            signingConfig = if (rootProject.file("keystore.properties").exists()) {
-                signingConfigs.getByName("release")
-            } else {
-                signingConfigs.getByName("debug")
+            // -PunsignedRelease emits app-release-unsigned.apk. Needed because
+            // AGP 8.x signs with RSA-PSS, whose random salt makes the APK Signing
+            // Block differ on every build even when all 164 zip entries are
+            // byte-identical — so reproducibility must be checked unsigned
+            // (same approach as scripts/verify-reproducible.sh in android-rebirth).
+            signingConfig = when {
+                project.hasProperty("unsignedRelease") -> null
+                // 无 keystore.properties 时回退 debug 签名（本机侧载友好）；上架前配置正式签名
+                rootProject.file("keystore.properties").exists() -> signingConfigs.getByName("release")
+                else -> signingConfigs.getByName("debug")
             }
         }
     }
