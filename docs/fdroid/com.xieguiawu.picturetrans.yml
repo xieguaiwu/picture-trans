@@ -2,6 +2,10 @@
 # 提交位置：gitlab.com/fdroid/fdroiddata → metadata/com.xieguiawu.picturetrans.yml
 # 流程：fork fdroiddata → 新建该文件 → MR（GitLab CI 自动 lint + build 验证）
 # 校验：bash scripts/validate-fdroid-metadata.sh docs/fdroid/com.xieguiawu.picturetrans.yml
+# 可复现性（2026-09-06 实测，tag v1.0.0 干净树双构建）：
+#   unsigned APK SHA-256 = 68c407838ad301b1c1b4aa8fdab981feccff09176eb671ee1cd5d65b208577d3
+#   注：签名 APK 逐构建不同（AGP 8.x 用 RSA-PSS，随机 salt），故比对走 -PunsignedRelease，
+#       与 F-Droid 自己的 apksigcopier 去签名比对同法。
 # 说明：无 AntiFeatures —— 纯局域网工具，不依赖任何专有网络服务，无追踪。
 #       注意明文 HTTP：这是局域网内有意取舍，已在 full_description 声明并警告
 #       不得暴露公网；F-Droid 不因明文 HTTP 拒绝收录（仅影响传输机密性）。

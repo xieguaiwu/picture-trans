@@ -12,10 +12,11 @@
 | 依赖全 FOSS（Ktor / Compose / zxing，仅 google() + mavenCentral()） | ✅ |
 | 无专有二进制入库 | ✅ 纯 Kotlin，无 NDK、无 jar/aar |
 | Gradle wrapper 已提交 | ✅ `gradlew` + `gradle/wrapper/` |
-| git tag `v1.0.0` | ❌ **待打**（`scripts/validate-fdroid-metadata.sh` 会拦住） |
+| git tag `v1.0.0` | ✅ 已打并推送 |
 | fastlane 元数据（en-US + zh-CN） | ✅ 文案 + icon + 2 张截图 |
-| 可复现构建验证 | ⬜ 待跑 `scripts/verify-reproducible.sh` |
+| 可复现构建验证 | ✅ 已过（unsigned SHA-256 `68c40783…208577d3`，tag v1.0.0）|
 | 真机冒烟（华为 NOH-AN00 互传） | ❌ 未做 |
+| GitHub Release v1.0.0（签名 APK） | ✅ 已发 |
 | GitLab 账号 | ❌ 用户需注册 |
 
 ## 已就绪的文件
@@ -60,6 +61,10 @@ git push mine add-picture-trans
 # 提交位置：gitlab.com/fdroid/fdroiddata → metadata/com.xieguiawu.picturetrans.yml
 # 流程：fork fdroiddata → 新建该文件 → MR（GitLab CI 自动 lint + build 验证）
 # 校验：bash scripts/validate-fdroid-metadata.sh docs/fdroid/com.xieguiawu.picturetrans.yml
+# 可复现性（2026-09-06 实测，tag v1.0.0 干净树双构建）：
+#   unsigned APK SHA-256 = 68c407838ad301b1c1b4aa8fdab981feccff09176eb671ee1cd5d65b208577d3
+#   注：签名 APK 逐构建不同（AGP 8.x 用 RSA-PSS，随机 salt），故比对走 -PunsignedRelease，
+#       与 F-Droid 自己的 apksigcopier 去签名比对同法。
 # 说明：无 AntiFeatures —— 纯局域网工具，不依赖任何专有网络服务，无追踪。
 #       注意明文 HTTP：这是局域网内有意取舍，已在 full_description 声明并警告
 #       不得暴露公网；F-Droid 不因明文 HTTP 拒绝收录（仅影响传输机密性）。
@@ -109,13 +114,25 @@ server and shows a URL + QR code; no USB, no cloud, no PC-side install.
   MediaStore (scoped storage on API 29+); allowBackup=false
 - Traffic is plain HTTP by design (LAN only, no cert burden); the description
   warns against exposing the port. Random per-install URL token gates access.
-- Reproducible build verified (dual-build SHA-256 match at tag v1.0.0)
+- Reproducible build verified at tag v1.0.0: two clean builds give 164/164
+  byte-identical zip entries; unsigned APK SHA-256
+  `68c407838ad301b1c1b4aa8fdab981feccff09176eb671ee1cd5d65b208577d3`.
+  Signed APKs differ per build (AGP 8.x RSA-PSS random salt), so the check
+  compares unsigned artifacts — same method F-Droid's apksigcopier uses.
 - Fastlane metadata (en-US / zh-CN); screenshots rendered from the real UI
 - Category File Transfer (validated against config/categories.yml)
 
 ## Build
 `gradle: yes`, `subdir: app`, commit v1.0.0 (clean tree, wrapper committed)
 ```
+
+## 提交前必须处理的一件事
+
+**截图 2 的网址是 `http://127.0.0.1:8765/t/.../`**。这是 Robolectric 的产物：它的
+native 网络层把 `lo` 报成非 loopback 的 site-local 地址，而 Robolectric 4.14.1
+没有 `ShadowNetworkInterface` 可改。对一款「局域网互传」app 来说这会误导用户
+（暗示只能本机访问）。**出店前用真机截图替换
+`fastlane/metadata/android/{en-US,zh-CN}/images/phoneScreenshots/`。**
 
 ## 评审关注点（reviewer 可能问）
 

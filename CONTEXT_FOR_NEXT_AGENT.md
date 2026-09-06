@@ -15,6 +15,14 @@ Picture Trans — 局域网文件传输 Android 应用（Kotlin/Compose，单 Ac
 
 ## 遗留问题 / 待办
 
+- [x] **可复现构建已实测通过**（2026-09-06，tag v1.0.0 干净树双构建）：
+      unsigned APK SHA-256 `68c407838ad301b1c1b4aa8fdab981feccff09176eb671ee1cd5d65b208577d3`。
+      ⚠️ **签名 APK 逐构建不同**——AGP 8.x 用 RSA-PSS，随机 salt 落在 APK Signing Block
+      （pair magic `SDKP`，实测约 5.8 KB 差异），而 164/164 个 zip 条目 CRC 完全相同。
+      所以 `scripts/verify-reproducible.sh` 必须带 `-PunsignedRelease`，
+      与 F-Droid 自己 apksigcopier 去签名比对同法。
+      **推论：另外三个 app 里凡是「签名构建双哈希一致」的说法都要重新验。**
+- [x] GitHub Release v1.0.0 已发（签名 APK，证书 SHA-256 `c5ec83d6…c3aa4b`）
 - [x] **F-Droid repo 侧准备完成**（2026-09-06）：`docs/fdroid/{com.xieguiawu.picturetrans.yml, fdroiddata-mr-0001.patch, SUBMIT_GUIDE.md}`
       + `scripts/{validate-fdroid-metadata.sh, verify-reproducible.sh, render-icon.py}`
       + `fastlane/metadata/android/{en-US,zh-CN}/` + CI。**尚未提交 fdroiddata**（需用户 GitLab 账号）。
