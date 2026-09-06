@@ -1,0 +1,35 @@
+# F-Droid 收录 metadata
+# 提交位置：gitlab.com/fdroid/fdroiddata → metadata/com.xieguiawu.picturetrans.yml
+# 流程：fork fdroiddata → 新建该文件 → MR（GitLab CI 自动 lint + build 验证）
+# 校验：bash scripts/validate-fdroid-metadata.sh docs/fdroid/com.xieguiawu.picturetrans.yml
+# 说明：无 AntiFeatures —— 纯局域网工具，不依赖任何专有网络服务，无追踪。
+#       注意明文 HTTP：这是局域网内有意取舍，已在 full_description 声明并警告
+#       不得暴露公网；F-Droid 不因明文 HTTP 拒绝收录（仅影响传输机密性）。
+# 注意：Builds 只列已打 tag 的版本。
+
+Categories:
+  - File Transfer
+License: MIT
+AuthorName: xieguaiwu
+AuthorEmail: xieguaiwu@users.noreply.github.com
+SourceCode: https://github.com/xieguaiwu/picture-trans
+IssueTracker: https://github.com/xieguaiwu/picture-trans/issues
+Changelog: https://github.com/xieguaiwu/picture-trans/releases
+
+AutoName: Picture Trans
+
+RepoType: git
+Repo: https://github.com/xieguaiwu/picture-trans
+
+Builds:
+  - versionName: 1.0.0
+    versionCode: 1
+    commit: v1.0.0
+    subdir: app
+    gradle:
+      - yes
+
+AutoUpdateMode: Version
+UpdateCheckMode: Tags
+CurrentVersion: 1.0.0
+CurrentVersionCode: 1

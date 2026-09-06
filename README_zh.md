@@ -87,3 +87,19 @@ app/src/main/java/com/xieguiawu/picturetrans/
 - 服务器在 app 打开时运行（锁屏即停——前台服务是后续工作）
 - 旧设备（API 26–28）走传统文件权限路径
 - 目录浏览仅限 Download（基于 MediaStore 查询）
+## F-Droid
+
+**尚未提交。** `docs/fdroid/` 已备好通过校验的 fdroiddata metadata、可直接
+`git am` 的 MR 补丁，以及带前置条件清单的提交指引。开 MR 需要 GitLab 账号。
+
+- 本应用**不声明任何 AntiFeatures**——与作者其他 app 不同，它不依赖任何专有
+  网络服务，别照抄别的 app 的 yml
+- 商店文案：`fastlane/metadata/android/{en-US,zh-CN}/`
+- 截图由 Robolectric + layoutlib 渲染真实 UI 代码生成（无需设备、非伪造像素）：
+
+  ```bash
+  ./gradlew :app:testDebugUnitTest --tests "*StoreScreenshotsTest" -PstoreScreenshots
+  ```
+
+- 商店图标从当前生效的自适应图标矢量渲染：`python3 scripts/render-icon.py`
+- 提交前自检：`bash scripts/validate-fdroid-metadata.sh`

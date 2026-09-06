@@ -65,6 +65,14 @@ android {
     }
 }
 
+// Store screenshots are opt-in: ./gradlew :app:testDebugUnitTest \
+//     --tests "*StoreScreenshotsTest" -PstoreScreenshots
+// Note: `-Pflag` on the Gradle CLI sets the property to the EMPTY string, not
+// "true", so presence must be tested with hasProperty().
+tasks.withType<Test>().configureEach {
+    systemProperty("storeScreenshots", if (project.hasProperty("storeScreenshots")) "true" else "false")
+}
+
 dependencies {
     val composeBom = platform("androidx.compose:compose-bom:2024.10.00")
     implementation(composeBom)
