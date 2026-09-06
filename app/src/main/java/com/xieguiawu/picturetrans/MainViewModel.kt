@@ -2,6 +2,7 @@ package com.xieguiawu.picturetrans
 
 import android.app.Application
 import androidx.lifecycle.AndroidViewModel
+import com.xieguiawu.picturetrans.media.MediaAccess
 import com.xieguiawu.picturetrans.media.MediaPermissions
 import com.xieguiawu.picturetrans.server.ServerRunner
 import com.xieguiawu.picturetrans.server.ServerState
@@ -18,8 +19,8 @@ class MainViewModel(app: Application) : AndroidViewModel(app) {
     val activeTransfers: StateFlow<List<TransferProgress>> = ServerRunner.tracker.active
     val history: StateFlow<List<HistoryEntry>> = ServerRunner.tracker.history
 
-    private val _mediaGranted = MutableStateFlow(MediaPermissions.granted(app))
-    val mediaGranted: StateFlow<Boolean> = _mediaGranted.asStateFlow()
+    private val _mediaAccess = MutableStateFlow(MediaPermissions.access(app))
+    val mediaAccess: StateFlow<MediaAccess> = _mediaAccess.asStateFlow()
 
     fun defaultPort(): Int = TokenStore.port(getApplication())
 
@@ -30,6 +31,6 @@ class MainViewModel(app: Application) : AndroidViewModel(app) {
     fun stopServer() = ServerRunner.stop()
 
     fun refreshPermission() {
-        _mediaGranted.value = MediaPermissions.granted(getApplication())
+        _mediaAccess.value = MediaPermissions.access(getApplication())
     }
 }

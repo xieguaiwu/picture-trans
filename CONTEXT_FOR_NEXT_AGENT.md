@@ -7,6 +7,23 @@ Picture Trans — 局域网文件传输 Android 应用（Kotlin/Compose，单 Ac
 
 ## 最后一次完成的工作
 
+- **媒体权限授权死循环修复（2026-09-06）**：华为 Mate 80 真机「无法被授权访问图片」根因 =
+  `MediaPermissions.required()` 未按 SDK 分流 + `granted()` 把部分授权当未授权。
+  两处 P0：① API 33 请求 API 34 才存在的 `READ_MEDIA_VISUAL_USER_SELECTED`
+  → 系统静默拒绝（无弹窗）→ `granted()=required().all` 恒 false；
+  ② API 29-32 请求 manifest `maxSdkVersion=28` 剔除掉的 WRITE_EXTERNAL_STORAGE，同样静默拒绝；
+  ③ Android 14+ 部分授权（「选择照片」）下 IMAGES/VIDEO 保持 denied，旧判定恒 false →
+  授权卡片永不消失，重复请求只弹照片选择器不再是权限弹窗 → 死循环，用户无路可走
+  （唯一逃生通道「忽略」按钮 onClick 是空的）。
+  修复：`required()` 四档分流（34+/33/29-32/26-28，对照官方
+  developer.android.com/about/versions/14/changes/partial-photo-video-access）；
+  `access()` 返回 Full/Partial/Denied 枚举（Partial=部分授权可用）；
+  PermissionCard 支持 Partial 态（更多照片加选 + 允许全部跳设置页），
+  「忽略」接上 ACTION_APPLICATION_DETAILS_SETTINGS；
+  MainActivity onResume 刷新权限（官方 best practice：用户可从设置页改权限后返回）。
+  新增 MediaPermissionsTest 11 例（sdk 28/31/33/34 四档全覆盖）；43 测试 0 失败；
+  assembleDebug/Release 全绿。**真机复验仍待用户**（授权后卡片应消失、PC 端能列出照片）。
+
 - **全深色主题改造（2026-09-06）**：三处同改——`ui/Theme.kt` 删 `isSystemInDarkTheme()` 分支恒取 dark scheme（API31+ `dynamicDarkColorScheme` / 回落 `darkColorScheme`）；`res/values/themes.xml` 父主题由 `Theme.Material.Light.NoActionBar` 改 `Theme.Material.NoActionBar`（否则启动白闪）；`server/WebPage.kt` PC 端 SPA CSS 转深色（`:root` 变量 + `color-scheme: dark`，强调色拆出 `--accent-text:#7ab0ff` 供文字用，深色底上 #1b6ef3 对比度不足）。二维码**保持白底黑码**（功能例外，反色码旧扫描器兼容性差）。本地 `testDebugUnitTest`+`assembleDebug`+`assembleRelease` 全绿（30 测试 0 失败），新 APK 已回传 `dist/`。
 - 全部功能实现：媒体列表（图片/视频/Download 三集合）、缩略图、流式下载 + Range、multipart 流式上传、进度追踪、二维码、token 鉴权
 - 四项自查修复（2026-09-05）：API<29 Download 查询缺 DATA LIKE 过滤；API<29 缺 WRITE_EXTERNAL_STORAGE；ServerRunner stop/start 竞态（generation 计数器）；edge-to-edge 系统栏 insets
@@ -15,6 +32,8 @@ Picture Trans — 局域网文件传输 Android 应用（Kotlin/Compose，单 Ac
 
 ## 遗留问题 / 待办
 
+- [ ] **真机复验权限修复**：Mate 80 装 app-debug.apk（含本次修复）→ 授权 → 卡片应消失、
+      PC 端应能列出照片/视频；若仍异常查 `adb logcat | grep -i permission`
 - [x] **可复现构建已实测通过**（2026-09-06，tag v1.0.0 干净树双构建）：
       unsigned APK SHA-256 `68c407838ad301b1c1b4aa8fdab981feccff09176eb671ee1cd5d65b208577d3`。
       ⚠️ **签名 APK 逐构建不同**——AGP 8.x 用 RSA-PSS，随机 salt 落在 APK Signing Block
@@ -82,4 +101,4 @@ Picture Trans — 局域网文件传输 Android 应用（Kotlin/Compose，单 Ac
 
 ## 最后更新时间
 
-2026-09-06 13:10
+2026-09-06 15:30（媒体权限授权死循环修复轮）
