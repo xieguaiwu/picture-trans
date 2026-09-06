@@ -7,6 +7,7 @@ Picture Trans — 局域网文件传输 Android 应用（Kotlin/Compose，单 Ac
 
 ## 最后一次完成的工作
 
+- **全深色主题改造（2026-09-06）**：三处同改——`ui/Theme.kt` 删 `isSystemInDarkTheme()` 分支恒取 dark scheme（API31+ `dynamicDarkColorScheme` / 回落 `darkColorScheme`）；`res/values/themes.xml` 父主题由 `Theme.Material.Light.NoActionBar` 改 `Theme.Material.NoActionBar`（否则启动白闪）；`server/WebPage.kt` PC 端 SPA CSS 转深色（`:root` 变量 + `color-scheme: dark`，强调色拆出 `--accent-text:#7ab0ff` 供文字用，深色底上 #1b6ef3 对比度不足）。二维码**保持白底黑码**（功能例外，反色码旧扫描器兼容性差）。本地 `testDebugUnitTest`+`assembleDebug`+`assembleRelease` 全绿（30 测试 0 失败），新 APK 已回传 `dist/`。
 - 全部功能实现：媒体列表（图片/视频/Download 三集合）、缩略图、流式下载 + Range、multipart 流式上传、进度追踪、二维码、token 鉴权
 - 四项自查修复（2026-09-05）：API<29 Download 查询缺 DATA LIKE 过滤；API<29 缺 WRITE_EXTERNAL_STORAGE；ServerRunner stop/start 竞态（generation 计数器）；edge-to-edge 系统栏 insets
 - 测试 30 个全绿（含真 socket E2E：鉴权 404/列表/逐字节下载/Range 206/上传/文件名清洗）；lint 0 警告
@@ -14,10 +15,11 @@ Picture Trans — 局域网文件传输 Android 应用（Kotlin/Compose，单 Ac
 
 ## 遗留问题 / 待办
 
-- [ ] 真机验证：华为手机装 `dist/app-release.apk` 实测互传（本机无设备连接）
+- [ ] **构建改在本地**（2026-09-06）：build-server 密码未持久化（ssh 免密不可用、rbw 无条目），本会话退回本地 `./gradlew`（有 `~/Android/Sdk` + JDK 21，2m02s 全量）。要回云构建需用户重新提供密码并建议落 rbw / 配 deploy key。
+- [ ] 真机验证：华为 Mate 40 Pro（NOH-AN00）装 `dist/app-release.apk` 实测互传 + **确认深色观感**（本机无设备连接，且无 adb）
 - [ ] momus 审查两次超时（glm-5.3-flash thinking xhigh），已降级为自查 + 测试兜底；后续可换模型重审
 - [ ] keystore.properties 缺失 → release 是 debug 签名回退；正式发版前配签名
-- [ ] git 仓库未初始化（本地无 git）
+- [x] git 仓库已初始化并推送 origin（`github.com/xieguaiwu/picture-trans`，2026-09-06 确认 master 与 origin 同步）
 - [ ] 锁屏即停服务（前台服务未做）——路线图项
 - [ ] WebPage SPA 的「下载所选」用连续 a.click，Chrome 会弹多文件下载许可，可接受
 
@@ -40,4 +42,4 @@ Picture Trans — 局域网文件传输 Android 应用（Kotlin/Compose，单 Ac
 
 ## 最后更新时间
 
-2026-09-05 21:30
+2026-09-06 11:50

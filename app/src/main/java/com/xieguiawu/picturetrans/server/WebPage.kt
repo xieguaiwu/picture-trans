@@ -13,7 +13,7 @@ object WebPage {
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Picture Trans</title>
 <style>
-:root { --bg:#f5f6f8; --card:#fff; --ink:#1c1e21; --muted:#65676b; --line:#e4e6eb; --accent:#1b6ef3; }
+:root { color-scheme: dark; --bg:#141619; --card:#1e2126; --ink:#e6e8eb; --muted:#9aa1a9; --line:#333941; --accent:#1b6ef3; --accent-text:#7ab0ff; --accent-soft:#1c2a42; }
 * { box-sizing:border-box; margin:0; padding:0; }
 body { font-family:system-ui,-apple-system,"Segoe UI",Roboto,"PingFang SC","Microsoft YaHei",sans-serif; background:var(--bg); color:var(--ink); }
 header { position:sticky; top:0; z-index:10; background:var(--accent); color:#fff; padding:14px 18px; }
@@ -21,7 +21,7 @@ header h1 { font-size:18px; font-weight:600; }
 header p { font-size:12px; opacity:.85; margin-top:2px; }
 nav { display:flex; gap:4px; padding:10px 12px 0; max-width:1080px; margin:0 auto; }
 nav button { flex:1; border:none; background:transparent; padding:10px 8px; font-size:15px; color:var(--muted); border-bottom:2px solid transparent; cursor:pointer; }
-nav button.on { color:var(--accent); border-bottom-color:var(--accent); font-weight:600; }
+nav button.on { color:var(--accent-text); border-bottom-color:var(--accent); font-weight:600; }
 main { max-width:1080px; margin:0 auto; padding:12px; }
 .toolbar { display:flex; align-items:center; gap:10px; margin:6px 0 12px; flex-wrap:wrap; }
 .toolbar .count { color:var(--muted); font-size:13px; }
@@ -30,22 +30,22 @@ button.ghost { background:var(--card); color:var(--ink); border:1px solid var(--
 button:disabled { opacity:.5; cursor:default; }
 .grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(150px,1fr)); gap:10px; }
 .card { background:var(--card); border:1px solid var(--line); border-radius:10px; overflow:hidden; display:flex; flex-direction:column; }
-.card .thumb { position:relative; aspect-ratio:1/1; background:#eceef1; display:flex; align-items:center; justify-content:center; font-size:40px; }
+.card .thumb { position:relative; aspect-ratio:1/1; background:#242830; display:flex; align-items:center; justify-content:center; font-size:40px; }
 .card img.thumbimg { position:absolute; inset:0; width:100%; height:100%; object-fit:cover; cursor:pointer; }
 .card .meta { padding:8px 10px; font-size:12px; color:var(--muted); }
 .card .name { color:var(--ink); font-size:13px; word-break:break-all; display:-webkit-box; -webkit-line-clamp:2; -webkit-box-orient:vertical; overflow:hidden; min-height:34px; }
 .card .row { display:flex; align-items:center; justify-content:space-between; padding:0 8px 8px; }
 .card input[type=checkbox] { width:17px; height:17px; accent-color:var(--accent); }
 .badge { position:absolute; left:8px; top:8px; background:rgba(0,0,0,.55); color:#fff; font-size:11px; padding:2px 6px; border-radius:6px; }
-.dl { border:none; background:#eef4ff; color:var(--accent); width:30px; height:30px; border-radius:8px; cursor:pointer; font-size:15px; }
+.dl { border:none; background:var(--accent-soft); color:var(--accent-text); width:30px; height:30px; border-radius:8px; cursor:pointer; font-size:15px; }
 .empty { text-align:center; color:var(--muted); padding:48px 0; font-size:14px; }
 #drop { border:2px dashed var(--line); border-radius:12px; background:var(--card); padding:36px 16px; text-align:center; color:var(--muted); cursor:pointer; }
-#drop.over { border-color:var(--accent); background:#f0f6ff; }
+#drop.over { border-color:var(--accent); background:var(--accent-soft); }
 #queue { margin-top:12px; display:flex; flex-direction:column; gap:8px; }
 .qitem { background:var(--card); border:1px solid var(--line); border-radius:8px; padding:8px 12px; font-size:13px; word-break:break-all; }
-.qbar { height:6px; background:#eceef1; border-radius:3px; margin-top:6px; overflow:hidden; }
+.qbar { height:6px; background:#2b3038; border-radius:3px; margin-top:6px; overflow:hidden; }
 .qbar>div { height:100%; background:var(--accent); width:0; transition:width .2s; }
-.qdone { color:#1a7f37; } .qerr { color:#c62828; }
+.qdone { color:#5ed08a; } .qerr { color:#ff7a7a; }
 .hidden { display:none; }
 </style>
 </head>
