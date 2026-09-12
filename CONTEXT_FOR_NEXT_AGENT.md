@@ -45,11 +45,9 @@ Picture Trans — 局域网文件传输 Android 应用（Kotlin/Compose，单 Ac
 - [x] **F-Droid repo 侧准备完成**（2026-09-06）：`docs/fdroid/{com.xieguiawu.picturetrans.yml, fdroiddata-mr-0001.patch, SUBMIT_GUIDE.md}`
       + `scripts/{validate-fdroid-metadata.sh, verify-reproducible.sh, render-icon.py}`
       + `fastlane/metadata/android/{en-US,zh-CN}/` + CI。**尚未提交 fdroiddata**（需用户 GitLab 账号）。
-- [ ] **提交前必须换真机截图**：`StoreScreenshotsTest` 在 Robolectric 下跑，
-      Robolectric 的 native 网络层把 `lo`/127.0.0.1 报成非 loopback 的 site-local 地址，
-      所以截图 2 的网址是 `http://127.0.0.1:8765/t/.../`。对「局域网互传」app 是误导性的
-      （暗示只能本机）。Robolectric 4.14.1 **无** ShadowNetworkInterface，改不了；
-      出店前用真机图替换 `fastlane/.../phoneScreenshots/`
+- [x] **真机截图已替换**（2026-09-12）：fastlane en-US + zh-CN 各 1 张真机主屏
+      （Robolectric 渲染图与占位 2.png 已删除）；README 增 docs/screenshots/phone-main.png。
+      原问题（截图显示 127.0.0.1）随之消失
 - [ ] **图标 fillType 修复改变了 app 外观**（见下）——用户若不喜欢可回退 commit
 - [ ] **构建改在本地**（2026-09-06）：build-server 密码未持久化（ssh 免密不可用、rbw 无条目），本会话退回本地 `./gradlew`（有 `~/Android/Sdk` + JDK 21，2m02s 全量）。要回云构建需用户重新提供密码并建议落 rbw / 配 deploy key。
 - [ ] 真机验证：华为 Mate 40 Pro（NOH-AN00）装 `dist/app-release.apk` 实测互传 + **确认深色观感**（本机无设备连接，且无 adb）
@@ -101,4 +99,4 @@ Picture Trans — 局域网文件传输 Android 应用（Kotlin/Compose，单 Ac
 
 ## 最后更新时间
 
-2026-09-06 15:30（媒体权限授权死循环修复轮）
+2026-09-12（真机截图批）
