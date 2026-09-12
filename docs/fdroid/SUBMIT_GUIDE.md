@@ -2,6 +2,8 @@
 
 本目录包含提交流程所需的一切。你只需要一个 GitLab 账号，约 2 分钟完成。
 
+> ✅ **已提交**：[MR !48684](https://gitlab.com/fdroid/fdroiddata/-/merge_requests/48684)（2026-09-12），等待审核（排期常 1-4 周）。以下内容保留作记录；fork CI 因新账号身份验证不可用（零 job），本地 `fdroid lint`（2.4.5）exit 0。
+
 > ⚠️ **提交前先读「前置条件」**——本项目目前还差 tag 与真机验证。
 
 ## 前置条件（当前状态）
@@ -119,7 +121,7 @@ server and shows a URL + QR code; no USB, no cloud, no PC-side install.
   `68c407838ad301b1c1b4aa8fdab981feccff09176eb671ee1cd5d65b208577d3`.
   Signed APKs differ per build (AGP 8.x RSA-PSS random salt), so the check
   compares unsigned artifacts — same method F-Droid's apksigcopier uses.
-- Fastlane metadata (en-US / zh-CN); screenshots rendered from the real UI
+- Fastlane metadata (en-US / zh-CN); screenshots are real-device captures (2026-09-12)
 - Category File Transfer (validated against config/categories.yml)
 
 ## Build

@@ -110,15 +110,16 @@ app/src/main/java/com/xieguiawu/picturetrans/
 - No folder browsing beyond the Download directory (MediaStore-based listing)
 ## F-Droid
 
-**Not submitted.** `docs/fdroid/` holds a validated fdroiddata metadata draft,
-a ready-to-`git am` MR patch and a submission guide with a pre-flight checklist.
-Opening the merge request needs a GitLab account.
+**Submitted (2026-09-12)** — [fdroiddata MR !48684](https://gitlab.com/fdroid/fdroiddata/-/merge_requests/48684),
+in review. (The fork's CI shows "failed" with zero jobs — a fresh-account
+identity-verification gate, not a metadata problem; `fdroid lint` passes locally.)
+`docs/fdroid/` keeps the metadata draft, MR patch and submission guide as a record.
 
 - No `AntiFeatures` are declared — unlike the author's other apps, this one
   depends on no proprietary network service. Don't copy another app's yml.
 - Store metadata: `fastlane/metadata/android/{en-US,zh-CN}/`
-- Screenshots are rendered from the real UI code under Robolectric + layoutlib
-  (no device needed, no fabricated pixels):
+- Screenshots are real-device captures (2026-09-12). (A Robolectric render
+  test also exists, kept for regression:
 
   ```bash
   ./gradlew :app:testDebugUnitTest --tests "*StoreScreenshotsTest" -PstoreScreenshots

@@ -48,6 +48,8 @@ Picture Trans — 局域网文件传输 Android 应用（Kotlin/Compose，单 Ac
 - [x] **真机截图已替换**（2026-09-12）：fastlane en-US + zh-CN 各 1 张真机主屏
       （Robolectric 渲染图与占位 2.png 已删除）；README 增 docs/screenshots/phone-main.png。
       原问题（截图显示 127.0.0.1）随之消失
+- **fdroiddata 已提交**：MR !48684（2026-09-12）；fork CI 因新账号身份验证零 job，
+      本地 `fdroid lint`（2.4.5）exit 0；等待审核（排期常 1-4 周），响应 reviewer 需登录 GitLab 网页
 - [ ] **图标 fillType 修复改变了 app 外观**（见下）——用户若不喜欢可回退 commit
 - [ ] **构建改在本地**（2026-09-06）：build-server 密码未持久化（ssh 免密不可用、rbw 无条目），本会话退回本地 `./gradlew`（有 `~/Android/Sdk` + JDK 21，2m02s 全量）。要回云构建需用户重新提供密码并建议落 rbw / 配 deploy key。
 - [ ] 真机验证：华为 Mate 40 Pro（NOH-AN00）装 `dist/app-release.apk` 实测互传 + **确认深色观感**（本机无设备连接，且无 adb）
