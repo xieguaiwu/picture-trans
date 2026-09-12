@@ -15,9 +15,9 @@
 | git tag `v1.0.0` | ✅ 已打并推送 |
 | fastlane 元数据（en-US + zh-CN） | ✅ 文案 + icon + 2 张截图 |
 | 可复现构建验证 | ✅ 已过（unsigned SHA-256 `68c40783…208577d3`，tag v1.0.0）|
-| 真机冒烟（华为 NOH-AN00 互传） | ❌ 未做 |
+| 真机冒烟（华为 NOH-AN00 互传） | ⏳ 部分——服务已在真机启动并出码（见截图）；PC 浏览器实传仍待确认 |
 | GitHub Release v1.0.0（签名 APK） | ✅ 已发 |
-| GitLab 账号 | ❌ 用户需注册 |
+| GitLab 账号 | ✅ 已注册（2026-09-12） |
 
 ## 已就绪的文件
 
@@ -126,13 +126,11 @@ server and shows a URL + QR code; no USB, no cloud, no PC-side install.
 `gradle: yes`, `subdir: app`, commit v1.0.0 (clean tree, wrapper committed)
 ```
 
-## 提交前必须处理的一件事
+## 截图状态（2026-09-12 已解决）
 
-**截图 2 的网址是 `http://127.0.0.1:8765/t/.../`**。这是 Robolectric 的产物：它的
-native 网络层把 `lo` 报成非 loopback 的 site-local 地址，而 Robolectric 4.14.1
-没有 `ShadowNetworkInterface` 可改。对一款「局域网互传」app 来说这会误导用户
-（暗示只能本机访问）。**出店前用真机截图替换
-`fastlane/metadata/android/{en-US,zh-CN}/images/phoneScreenshots/`。**
+~~截图 2 的网址显示 `127.0.0.1`（Robolectric 产物）~~ → 已换**真机实截**
+（`fastlane/metadata/android/{en-US,zh-CN}/images/phoneScreenshots/1.png`，
+Robolectric 渲染图与占位 2.png 已删除）。真机互传冒烟（PC 浏览器实传）仍建议提交前跑一次。
 
 ## 评审关注点（reviewer 可能问）
 
@@ -140,10 +138,7 @@ native 网络层把 `lo` 报成非 loopback 的 site-local 地址，而 Robolect
   F-Droid 不因明文 HTTP 拒绝收录（影响传输机密性，非合规项）
 - **无 AntiFeatures**：与另外三个 app 不同，本应用不依赖任何专有网络服务，
   所以**不声明** NonFreeNet 是正确的，别照抄别的 app 的 yml
-- **截图来源**：由 Robolectric + layoutlib 渲染真实 UI 代码生成
-  （`app/src/test/java/.../StoreScreenshotsTest.kt`，
-  重跑：`./gradlew :app:testDebugUnitTest --tests "*StoreScreenshotsTest" -PstoreScreenshots`），
-  非伪造数据；如 reviewer 要求真机图，替换 `fastlane/.../phoneScreenshots/` 即可
+- **截图来源**：真机实截（2026-09-12，华为 HarmonyOS，1152x2266）
 - **许可证**：MIT（LICENSE 在仓库根）
 - **签名**：当前走 F-Droid 官方签名。若要 Verified 徽章，用
   `AllowedAPKSigningKeys: c5ec83d6bf844902d137af09e6b2fb0c7a247eff5c5287954238c28df8c3aa4b`

@@ -25,6 +25,13 @@ phone (Picture Trans)                         computer
 - Transfer progress and history shown live on the phone
 - Access token in the URL path (`/t/<token>/`) keeps out other LAN devices
 
+## Screenshots
+
+Real-device capture (2026-09-12): the phone hosts the server and shows
+the URL + QR code to open on the computer.
+
+![Picture Trans main screen](docs/screenshots/phone-main.png)
+
 ## Requirements
 
 - Android 8.0+ (API 26+)
