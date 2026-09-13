@@ -1,5 +1,8 @@
 # CONTEXT_FOR_NEXT_AGENT.md
 
+
+> 🔗 跨仓 F-Droid 申请总览（五 app MR 状态 / GitLab 基础设施 / 提交流程 / 教训索引）：`../FDROID_PORTFOLIO.md`——状态变更时与本文双向同步。
+
 ## 项目当前状态
 
 Picture Trans — 局域网文件传输 Android 应用（Kotlin/Compose，单 Activity）。
