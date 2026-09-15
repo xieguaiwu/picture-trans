@@ -102,6 +102,14 @@ Picture Trans — 局域网文件传输 Android 应用（Kotlin/Compose，单 Ac
 - ⚠️ **keystore 与口令同机存放，未做异地备份**；丢了就无法更新签名。用户需自行备份
 - 签名决策（F-Droid 官方签名 vs 自有签名）**必须在首次发布前定，之后不可更换**
 
+## 2026-09-15 F-Droid 审核第一轮响应（reviewer: linsui）
+
+- **reviewer 四项共性要求已全部落实**：①MR 描述换 App Inclusion 模板+勾选框，标题改 `New app: Picture Trans (com.xieguiawu.picturetrans)` ②`commit` 钉全 hash `6df937ee81d19964d273d2f7010bf7bdd0faf254`（tag v1.0.1）③更新到 v1.0.1/vc2（单 Build）。
+- **应用侧改动（v1.0.1，versionCode 2）**：release 构建不再回退 debug 签名（`else -> null`）——原回退导致 F-Droid 构建被 Android Debug key 签名 → AGP 写入 `Dependency metadata` 签名块 → CI `check apk` 报错（root cause 已在 MR 评论说明）。
+- **本地 CI 复刻（fdroidserver git master）**：rewritemeta 无 diff / lint 零警告 / checkupdates --auto 无 diff / scanner 无发现 / tools 六脚本全过。
+- fork CI 红叉 = GitLab 身份验证门禁（零 job），已请求 reviewer 从上游重触发。
+- 元数据副本 docs/fdroid/*.yml 已同步规范形；validate 脚本已支持全 hash commit。
+
 ## 最后更新时间
 
-2026-09-12（真机截图批）
+2026-09-15（审核第一轮：四项要求落实 + v1.0.1 发版（签名回退修复）+ 元数据规范形）
