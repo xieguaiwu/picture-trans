@@ -15,8 +15,8 @@ android {
         applicationId = "com.xieguiawu.picturetrans"
         minSdk = 26
         targetSdk = 35
-        versionCode = 1
-        versionName = "1.0.0"
+        versionCode = 2
+        versionName = "1.0.1"
     }
 
     signingConfigs {
@@ -43,9 +43,11 @@ android {
             // (same approach as scripts/verify-reproducible.sh in android-rebirth).
             signingConfig = when {
                 project.hasProperty("unsignedRelease") -> null
-                // 无 keystore.properties 时回退 debug 签名（本机侧载友好）；上架前配置正式签名
+                // F-Droid 构建必须保持 unsigned：fdroidserver 的 remove_signing_keys 会删掉
+                // signingConfigs 块与本赋值行，when 表达式残留会落到 else 用 Android Debug key 签名，
+                // 进而触发 AGP 写入 Dependency metadata 块导致 check apk 失败。无 keystore.properties 时保持 unsigned。
                 rootProject.file("keystore.properties").exists() -> signingConfigs.getByName("release")
-                else -> signingConfigs.getByName("debug")
+                else -> null
             }
         }
     }

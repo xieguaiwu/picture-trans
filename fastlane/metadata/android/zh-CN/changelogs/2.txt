@@ -1,0 +1,2 @@
+- release 构建不再回退 debug 签名（F-Droid 构建保持 unsigned）
+- 版本 1.0.1 (versionCode 2)
