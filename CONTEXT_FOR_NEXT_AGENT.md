@@ -115,7 +115,8 @@ Picture Trans — 局域网文件传输 Android 应用（Kotlin/Compose，单 Ac
 - **上游 pipeline（reviewer 09-15 触发）全绿**，已汇报；本轮更新：联系邮箱换 `xieguaiwu@163.com`、元数据在与 CI 一致依赖集（ruamel 0.18.10 + fdroidserver a35fddd）下复核（本 app 折行本就合规，仅邮箱变更）。
 - RB 复测：v1.0.1 于 tag 双构建一致 `52a1cf3772015d431f6abdfe3325ebce5d3e1d83b9c4274d0f659cd3c36deff2`（2026-09-25 复跑）。
 - 已推 fork 分支并回复 reviewer，待其重触发上游 CI。
+- 上游 CI（2026-09-25 重触发）**45/45 jobs 全绿**；已回复绿报 + 勾选描述 pipeline 项。等 reviewer 终审/合并。
 
 ## 最后更新时间
 
-2026-09-25（审核第二轮：邮箱 + v1.0.1 RB 复测；pipeline 已全绿）
+2026-09-25（审核第二轮：邮箱 + v1.0.1 RB 复测；上游 CI 45/45 全绿）
