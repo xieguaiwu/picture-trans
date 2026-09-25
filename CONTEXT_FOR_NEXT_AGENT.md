@@ -110,6 +110,12 @@ Picture Trans — 局域网文件传输 Android 应用（Kotlin/Compose，单 Ac
 - fork CI 红叉 = GitLab 身份验证门禁（零 job），已请求 reviewer 从上游重触发。
 - 元数据副本 docs/fdroid/*.yml 已同步规范形；validate 脚本已支持全 hash commit。
 
+## 2026-09-25 F-Droid 审核第二轮响应（reviewer: linsui）
+
+- **上游 pipeline（reviewer 09-15 触发）全绿**，已汇报；本轮更新：联系邮箱换 `xieguaiwu@163.com`、元数据在与 CI 一致依赖集（ruamel 0.18.10 + fdroidserver a35fddd）下复核（本 app 折行本就合规，仅邮箱变更）。
+- RB 复测：v1.0.1 于 tag 双构建一致 `52a1cf3772015d431f6abdfe3325ebce5d3e1d83b9c4274d0f659cd3c36deff2`（2026-09-25 复跑）。
+- 已推 fork 分支并回复 reviewer，待其重触发上游 CI。
+
 ## 最后更新时间
 
-2026-09-15（审核第一轮：四项要求落实 + v1.0.1 发版（签名回退修复）+ 元数据规范形）
+2026-09-25（审核第二轮：邮箱 + v1.0.1 RB 复测；pipeline 已全绿）

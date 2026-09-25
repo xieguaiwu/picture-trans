@@ -1,6 +1,6 @@
-From f6e7879fd4fd9ea66c6b886ba3dfd370c0e5bf6b Mon Sep 17 00:00:00 2001
+From 8457242aa51ab5af3cf309890723989feda58d83 Mon Sep 17 00:00:00 2001
 From: xieguaiwu <xieguaiwu@users.noreply.github.com>
-Date: Tue, 15 Sep 2026 22:34:45 +0800
+Date: Fri, 25 Sep 2026 13:19:40 +0800
 Subject: [PATCH] Add Picture Trans (com.xieguiawu.picturetrans)
 
 MIT licensed; fastlane metadata (en-US / zh-CN); reproducible build verified at the tagged commit.
@@ -11,7 +11,7 @@ MIT licensed; fastlane metadata (en-US / zh-CN); reproducible build verified at 
 
 diff --git a/metadata/com.xieguiawu.picturetrans.yml b/metadata/com.xieguiawu.picturetrans.yml
 new file mode 100644
-index 0000000000..1c3fac2368
+index 000000000..be1b2449b
 --- /dev/null
 +++ b/metadata/com.xieguiawu.picturetrans.yml
 @@ -0,0 +1,26 @@
@@ -19,7 +19,7 @@ index 0000000000..1c3fac2368
 +  - File Transfer
 +License: MIT
 +AuthorName: xieguaiwu
-+AuthorEmail: xieguaiwu@users.noreply.github.com
++AuthorEmail: xieguaiwu@163.com
 +SourceCode: https://github.com/xieguaiwu/picture-trans
 +IssueTracker: https://github.com/xieguaiwu/picture-trans/issues
 +Changelog: https://github.com/xieguaiwu/picture-trans/releases
